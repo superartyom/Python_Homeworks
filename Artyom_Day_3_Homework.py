@@ -2,8 +2,15 @@
 import random
 # 1. Enter your name, then find the sum of the ASCII values of the letters in your name. If that number is larger than
 # 500, print "I've got a great name!", and "I've got a fancy name!" otherwise.
-x = input('Enter your name: ')
-print('' * 100)
+name = input('Enter your name: ')
+summary = 0
+for i in range(0, len(name)):
+    summary += ord(name[i])
+if summary > 500:
+    print('I\'ve got a great name!\n', '█' * 100)
+else:
+    print('I\'ve got a fancy name!\n', '█' * 100)
+
 # 2. Ask the user for a movie title. If the title starts with a capital letter, print "Great title!", otherwise print
 # "Titles start with capital letters...". If the input is not a string, print "Why are you doing this to me?".
 
