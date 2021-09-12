@@ -30,7 +30,7 @@ age = int(input('Enter your age: '))
 if age >= 18:
     print('You\'re eligible to vote.', '\n', '█' * 100)
 else:
-    print('You\'re not eligible to vote.', '\n', '█' * 100)
+    print('You need to wait {} years'.format(18-age),'\n', '█' * 100)
 
 # 4. Write a program that will tell us whether a given year is a leap year or not.
 
