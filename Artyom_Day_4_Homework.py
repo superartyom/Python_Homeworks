@@ -3,21 +3,33 @@
 # 1. Create a 3x3 matrix that will contain the squares of the numbers from 1-9 using a nested loop.
 # Օգտագործելով ցիկլեր, ստեղծել 3x3 մատրից, որը կպարունակի 1-9 թվերի քառակուսիները։
 num = 1
-for i in range(3):
-    for j in range(3):
-        print(f'{num * num} ', end='')
+lst_1 = []
+lst_2 = []
+for i in range(0, 3):
+    for j in range(0, 3):
+        lst_2.append(num * num)
         num += 1
-    print()
+    lst_1 = lst_1 + lst_2
+    lst_2.pop()
+    lst_2.pop()
+    lst_2.pop()
+print(lst_1)
 print('█' * 100)
 # 2. Create a 3x3 matrix that will contain the squares of the numbers from 1-9 using a list comprehension.
 # Օգտագործելով comprehension, ստեղծել 3x3 մատրից, որը կպարունակի 1-9 թվերի քառակուսիները։
 num = 1
-list = []
-for i in range(3):
-    for j in range(3):
-        list.append(num * num)
+lst_1 = []
+lst_2 = []
+for i in range(0, 3):
+    for j in range(0, 3):
+        lst_2.append(num * num)
         num += 1
-print(list, '\n', '█' * 100, sep='')
+    lst_1 = lst_1 + lst_2
+    lst_2.pop()
+    lst_2.pop()
+    lst_2.pop()
+print(lst_1)
+print('█' * 100)
 # 4. Count the number of 'b's in the given string. DO NOT use the count() method.
 # Հաշվել տրված սթրինգում 'b'-երի քանակը։ Չօգտագործել count() մեթոդը։
 nonsense = 'Blinking blindly, brainy Bob brings beautiful beer bottles beneath blue butterflies billowing brilliantly.'
