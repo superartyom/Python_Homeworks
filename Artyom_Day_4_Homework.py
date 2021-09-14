@@ -9,7 +9,7 @@ for i in range(0, 3):
     for j in range(0, 3):
         lst_2.append(num * num)
         num += 1
-    lst_1 = lst_1 + lst_2
+    lst_1.append(list(lst_2))
     lst_2.pop()
     lst_2.pop()
     lst_2.pop()
@@ -18,13 +18,11 @@ print('█' * 100)
 # 2. Create a 3x3 matrix that will contain the squares of the numbers from 1-9 using a list comprehension.
 # Օգտագործելով comprehension, ստեղծել 3x3 մատրից, որը կպարունակի 1-9 թվերի քառակուսիները։
 num = 1
-lst_1 = []
-lst_2 = []
 for i in range(0, 3):
     for j in range(0, 3):
         lst_2.append(num * num)
         num += 1
-    lst_1.append(lst_2)
+    lst_1 [i] = lst_2
     lst_2.pop()
     lst_2.pop()
     lst_2.pop()
