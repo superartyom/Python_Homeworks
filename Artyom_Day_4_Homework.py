@@ -24,7 +24,7 @@ for i in range(0, 3):
     for j in range(0, 3):
         lst_2.append(num * num)
         num += 1
-    lst_1 = lst_1 + lst_2
+    lst_1.append(lst_2)
     lst_2.pop()
     lst_2.pop()
     lst_2.pop()
