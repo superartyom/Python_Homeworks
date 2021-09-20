@@ -38,9 +38,12 @@ print(lst_5)
 # 6. Given a list of ints, print True if the array contains a 2 next to a 2 somewhere.
 # Գրել ծրագիր, որը կտպի True, եթե տրված լիստում ինչ-որ տեղ 2 թվին 2 է հաջորդում։
 lst_6 = []
+checc_6 = False
 for rnum_6 in range(1, len(lst_6) - 1):
     if lst_6[rnum_6] == lst_6[rnum_6 - 1] and lst_6[rnum_6] == 2:
-        print(True)
+        checc_6 = True
+if checc_6:
+    print(True)
 # 7. Given a list of ints, print True if every element is a 1 or a 4, and False otherwise.
 # Գրել ծրագիր, որը կտպի True, եթե լիստի բոլոր էլեմենտները 1 կամ 4 են։ Հակառակ դեպքում տպել False:
 lst_7 = []
