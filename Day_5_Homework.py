@@ -46,11 +46,14 @@ if checc_6:
     print(True)
 # 7. Given a list of ints, print True if every element is a 1 or a 4, and False otherwise.
 # Գրել ծրագիր, որը կտպի True, եթե լիստի բոլոր էլեմենտները 1 կամ 4 են։ Հակառակ դեպքում տպել False:
-lst_7 = []
+lst_7 = [1, 2, 3, 4, 5, 6]
 checc = False
 for rnum_7 in range(1, len(lst_7) - 1):
     if lst_7[rnum_7] == 1 or lst_7[rnum_7] == 4:
         checc = True
+    else:
+        checc = False
+        break
 print(checc)
 # 8. Ask for user input and add that input as a key into the dictionary. If the key exists, warn the user about it and
 # do nothing. Assign some arbitrary value to it.
