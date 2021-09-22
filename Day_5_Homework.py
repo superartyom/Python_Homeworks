@@ -26,7 +26,7 @@ print(lst_3_1)
 num_4 = 0
 lst_4 = []
 for inum in range(0, 5):
-    lst_4.append(input(f'Enter {inum} number: '))
+    lst_4.append(input(f'Enter {inum+1} number: '))
 # 5. Write a program to print the given list after removing the 2nd, 4th and 5th elements.
 # Գրել ծրագիր, որը կջնջի տրված լիստի 2-րդ, 4-րդ և 5-րդ էլեմենտները։
 
