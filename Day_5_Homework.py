@@ -42,8 +42,6 @@ checc_6 = False
 for rnum_6 in range(1, len(lst_6)):
     if lst_6[rnum_6] == lst_6[rnum_6 - 1] and lst_6[rnum_6] == 2:
         checc_6 = True
-    else:
-        checc_6 = False
 if checc_6:
     print(True)
 # 7. Given a list of ints, print True if every element is a 1 or a 4, and False otherwise.
