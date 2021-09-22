@@ -15,12 +15,9 @@ for str_2 in lst_2:
         tot_2 += 1
 # 3. Write a program that will remove duplicates from a list. DO NOT use set() method directly on the list.
 # Գրել ծրագիր, որը կջնջի դուպլիկատները լիստից։ ՉՕԳՏԱԳՈՐԾԵԼ set() մեթոդը։
-lst_3 = ['a', 'b', 'a']
-lst_3.sort()
-for t in range(1, len(lst_3) - 1):
-    if lst_3[t] == lst_3[t - 1]:
-        lst_3.pop(t)
-print(lst_3)
+lst_3 = ['a', 'b', 'a', 'b', 'c', 'c']
+lst_3_1 = [lst_3[i] for i in range(len(lst_3)) if lst_3[i] != lst_3[i + 1]]
+print(lst_3_1)
 # 4. Create a list from 5 user inputs.
 # Ստեղծել լիստ 5 ներմուծված թվերից
 num_4 = 0
@@ -39,7 +36,7 @@ print(lst_5)
 # Գրել ծրագիր, որը կտպի True, եթե տրված լիստում ինչ-որ տեղ 2 թվին 2 է հաջորդում։
 lst_6 = []
 checc_6 = False
-for rnum_6 in range(1, len(lst_6) - 1):
+for rnum_6 in range(1, len(lst_6)):
     if lst_6[rnum_6] == lst_6[rnum_6 - 1] and lst_6[rnum_6] == 2:
         checc_6 = True
     else:
@@ -50,7 +47,7 @@ if checc_6:
 # Գրել ծրագիր, որը կտպի True, եթե լիստի բոլոր էլեմենտները 1 կամ 4 են։ Հակառակ դեպքում տպել False:
 lst_7 = [1, 2, 3, 4, 5, 6]
 checc = False
-for rnum_7 in range(1, len(lst_7) - 1):
+for rnum_7 in range(1, len(lst_7)):
     if lst_7[rnum_7] == 1 or lst_7[rnum_7] == 4:
         checc = True
     else:
@@ -72,7 +69,7 @@ if not checc_8:
 # 9. Loop through the values of a dictionary and add them to a new list.
 # Ցիկլի միջոցով ավելացնել dictionary—ի արժեքները նոր լիստի մեջ։
 mdict_9 = {'key': 'Value'}
-lst_9 = [n9 for n9 in range(len(mdict_9.values()) - 1)]
+lst_9 = [n9 for n9 in mdict_9.values()]
 # 10. Write a script to print a dictionary where the keys are numbers between 1 and 15 (both included)
 # and the values are square of keys.
 # Գրել ծրագիր, որը կստեղծի և կտպի dictionary, որի բանալիները [1,15] թվերն են, իսկ արժեքները դրանց քառակուսիները։
