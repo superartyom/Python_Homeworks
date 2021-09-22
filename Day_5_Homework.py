@@ -16,7 +16,10 @@ for str_2 in lst_2:
 # 3. Write a program that will remove duplicates from a list. DO NOT use set() method directly on the list.
 # Գրել ծրագիր, որը կջնջի դուպլիկատները լիստից։ ՉՕԳՏԱԳՈՐԾԵԼ set() մեթոդը։
 lst_3 = ['a', 'b', 'a', 'b', 'c', 'c']
-lst_3_1 = [lst_3[i] for i in range(len(lst_3)-1) if lst_3[i] != lst_3[i + 1]]
+lst_3_1 = []
+for x in lst_3:
+    if x not in lst_3_1:
+        lst_3_1.append(x)
 print(lst_3_1)
 # 4. Create a list from 5 user inputs.
 # Ստեղծել լիստ 5 ներմուծված թվերից
@@ -36,7 +39,7 @@ print(lst_5)
 # Գրել ծրագիր, որը կտպի True, եթե տրված լիստում ինչ-որ տեղ 2 թվին 2 է հաջորդում։
 lst_6 = []
 checc_6 = False
-for rnum_6 in range(1, len(lst_6)-1):
+for rnum_6 in range(1, len(lst_6)):
     if lst_6[rnum_6] == lst_6[rnum_6 - 1] and lst_6[rnum_6] == 2:
         checc_6 = True
     else:
@@ -47,7 +50,7 @@ if checc_6:
 # Գրել ծրագիր, որը կտպի True, եթե լիստի բոլոր էլեմենտները 1 կամ 4 են։ Հակառակ դեպքում տպել False:
 lst_7 = [1, 2, 3, 4, 5, 6]
 checc = False
-for rnum_7 in range(1, len(lst_7)-1):
+for rnum_7 in range(1, len(lst_7)):
     if lst_7[rnum_7] == 1 or lst_7[rnum_7] == 4:
         checc = True
     else:
