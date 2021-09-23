@@ -100,6 +100,19 @@ print(st(5, 6, 8))
 example_list = [4, 1, 2253, 32, 13, 64, 1, 90]
 
 
+def lsum(lst_7) -> int:
+    sm = 0
+    for x in lst_7:
+        if x == 13:
+            return sm
+        else:
+            sm += x
+    return sm
+
+
+print(lsum(example_list))
+
+
 # 8. Write down the following functions in a lambda form
 
 def square(x):
@@ -113,7 +126,28 @@ def circle_area(r, pi=3.14):
 def sum_to_power(x, y, p):
     return (x + y) ** p
 
-# 9. Create a list from 1-100. Using the filter function, return a new list containing only the numbers ending with 7.
 
+sq = lambda n1: n1 ** 2
+ca = lambda r1, pi=3.14: pi * r1 ** 2
+stp = lambda n3, n4, n5: (n3 + n4) ** n5
+print(sq(2), ca(3), stp(1, 2, 3))
+# 9. Create a list from 1-100. Using the filter function, return a new list containing only the numbers ending with 7.
+def f(t):
+    if t % 10 == 7:
+        return True
+    else:
+        return False
+lst_9 = []
+for y in range(1, 101):
+    lst_9.append(y)
+filtered = list(filter(f, lst_9))
+print(filtered)
 # 10. Create a function that will take a string as an argument. Return a new string which is the original string with
 # each letter doubled. For example 'cat' will become 'ccaatt'
+def sd(str_10: str):
+    str_10_1 = ''
+    for character in str_10:
+        str_10_1 += character
+        str_10_1 += character
+    return str_10_1
+print(sd('Cat'))
