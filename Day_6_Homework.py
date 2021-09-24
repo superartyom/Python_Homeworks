@@ -88,7 +88,7 @@ print(choc(int(input('Enter how much chocolate we need to eat: '))))
 # 6. Given three ints, a b c, return True if one of b or c is "close" (differing from a by at most 1), while the other
 # is "far", differing from both other values by 2 or more.
 def st(a: int, b: int, c: int) -> bool:
-    if (b - 1 == a or b + 1 == a or b == a) and ((a - 1 > c or a + 1 < c) and (b - 1 > c or b + 1 < c)):
+    if (b - 1 == a or b + 1 == a or b == a) and (a - 1 > c or a + 1 < c) and (b - 1 > c or b + 1 < c):
         return True
     else:
         return False
@@ -131,17 +131,23 @@ sq = lambda n1: n1 ** 2
 ca = lambda r1, pi=3.14: pi * r1 ** 2
 stp = lambda n3, n4, n5: (n3 + n4) ** n5
 print(sq(2), ca(3), stp(1, 2, 3))
+
+
 # 9. Create a list from 1-100. Using the filter function, return a new list containing only the numbers ending with 7.
 def f(t):
     if t % 10 == 7:
         return True
     else:
         return False
+
+
 lst_9 = []
 for y in range(1, 101):
     lst_9.append(y)
 filtered = list(filter(f, lst_9))
 print(filtered)
+
+
 # 10. Create a function that will take a string as an argument. Return a new string which is the original string with
 # each letter doubled. For example 'cat' will become 'ccaatt'
 def sd(str_10: str):
@@ -150,4 +156,6 @@ def sd(str_10: str):
         str_10_1 += character
         str_10_1 += character
     return str_10_1
+
+
 print(sd('Cat'))
