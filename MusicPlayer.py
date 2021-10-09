@@ -30,9 +30,19 @@
 #   f) Ստեղծել shuffle մեթոդ, որը կխառնի playlist-ի երգերը։
 # Այս ամենը ստեղծելուց հետո կարող եք ավելացնել ցանկացած այլ մեթոդ, որ անհրաժեշտ կհամարեք։ Բոլորիդ հաջողությու՛ն։
 class Song:
-    pass
+    def __init__(self, artist, album, year, song_name):
+        self.artist = artist
+        self.album = album
+        self.year = year
+        self.name = song_name
+    def __str__(self):
+        return f'artist: {self.artist}\Album: {self.album}\n Year: {self.year}\n Name: {self.name}'
 class PlayList:
     def __init__(self):
         self.songs: [Song] = []
-
     def load_songs(self):
+        with open('./albums.txt', 'r') as file:
+            for x in file.readlines()[0].split('\t')
+                artist, album, year, name = x.split('\t')
+                song = Song(artist, album, year, name)
+                self.songs.append(song)
