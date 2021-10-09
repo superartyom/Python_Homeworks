@@ -1,5 +1,9 @@
 """OOP"""
 
+import os
+import random
+
+
 # MusicPlayer homework
 # Now we are going to add some more methods to our classes. It makes sense to have an add_song and remove_song
 # methods in our playlist class, so we can modify our playlist whenever we'd like to.
@@ -35,14 +39,66 @@ class Song:
         self.album = album
         self.year = year
         self.name = song_name
+
     def __str__(self):
-        return f'artist: {self.artist}\Album: {self.album}\n Year: {self.year}\n Name: {self.name}'
+        return f'artist: {self.artist}\nAlbum: {self.album}\n Year: {self.year}\n Name: {self.name}'
+
+
 class PlayList:
     def __init__(self):
         self.songs: [Song] = []
-    def load_songs(self):
-        with open('./albums.txt', 'r') as file:
-            for x in file.readlines()[0].split('\t')
+
+    def load_songs(self, path):
+        if not os.path.exists(path):
+            return
+        with open(path, 'r') as file:
+            for x in file.readlines():
                 artist, album, year, name = x.split('\t')
                 song = Song(artist, album, year, name)
                 self.songs.append(song)
+
+    def add_song(self, artist, album, year, name):
+        self.songs.append(Song(artist, album, year, name))
+
+    def remove_song(self, artist, album, year, name):
+        song = Song(artist, album, year, name)
+        delattr(self.songs, str(song))
+
+    def show_songs(self):
+        for song in self.songs:
+            print(song)
+            print("_" * 100)
+
+
+class Player:
+    i = 0
+
+    def __init__(self, playlist):
+        self.playlist: PlayList = playlist
+        self.now_playing = False
+        self.now_play = playlist[i]
+
+    def play(self):
+        self.now_playing = True
+        return self.now_play
+
+    def show_now_playing(self):
+        return self.playlist[i]
+
+    def next_song(self):
+        return i += 1
+
+    def prev_song(self):
+        return i -= 1
+
+    def stop(self):
+        self.now_playing = False
+
+    def what_playing(self):
+        if self.now_playing:
+            return self.playlist[i]
+        else:
+            return 'Nothing is playing right now.'
+
+    def shuffle(self):
+        random.shuffle(self.playlist)
