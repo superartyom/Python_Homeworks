@@ -58,7 +58,9 @@ class PlayList:
                 self.songs.append(song)
 
     def add_song(self, artist, album, year, name):
-        self.songs.append(Song(artist, album, year, name))
+        for sng in self.songs:
+            if sng.name == name and sng.artist == artist and sng.year == year and sng.year == album:
+                self.songs.append(Song(artist, album, year, name))
 
     def remove_song(self, artist, album, year, name):
         for sng in self.songs:
@@ -76,30 +78,57 @@ class Player:
 
     def __init__(self, playlist):
         self.playlist: PlayList = playlist
-        self.now_playing = False
-        self.now_play = playlist[i]
+        self.is_playing = False
+        self.now_playing = ''
 
-    def play(self):
-        self.now_playing = True
-        return self.now_play
+    def play(self, play_index=0):
+        if play_index > len(self.playlist.songs):
+            print(f'No song at index {play_index}')
+            return
+        if not self.is_playing:
+            self.is_playing = True
+            self.now_playing = self.playlist.songs[play_index]
+            print(f'Now playing\n{self.playlist.songs[play_index]}')
+            print('=' * 100)
+        else:
+            print('Player is already active')
+            print('=' * 100)
+        return
 
-    def show_now_playing(self):
-        return self.playlist[i]
+    def show_current_song_info(self):
+        print('=' * 100)
+        print(self.now_playing)
+        print('=' * 100)
 
     def next_song(self):
-        return i += 1
+        index = self.playlist.songs.index(self.now_playing)
+        if index <= len(self.playlist.songs) - 1:
+            self.is_playing = False
+            self.play(index)
+        else:
+            print('We have reached the end of our playlist')
 
     def prev_song(self):
-        return i -= 1
+        index = self.playlist.songs.index(self.now_playing) - 1
+        if index > 0:
+            self.is_playing = False
+            self.play(index)
+        else:
+            print('We have reached the beginning of our playlist')
+        self.play(index)
 
     def stop(self):
-        self.now_playing = False
-
-    def what_playing(self):
-        if self.now_playing:
-            return self.playlist[i]
+        if self.is_playing:
+            self.is_playing = False
+            print('The player has been stopped')
         else:
-            return 'Nothing is playing right now.'
+            print('Player isnt active')
 
     def shuffle(self):
-        random.shuffle(self.playlist)
+        shuffled = self.playlist.songs.copy()
+        shuffled.remove(self.now_playing)
+        random.shuffle(shuffled)
+        self.playlist.songs = shuffled.insert(0, self.now_playing)
+
+    def __str__(self):
+        return f'This player has a playlist containing {len(self.playlist.songs)} songs'
