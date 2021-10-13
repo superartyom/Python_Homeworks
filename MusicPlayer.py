@@ -61,8 +61,9 @@ class PlayList:
         self.songs.append(Song(artist, album, year, name))
 
     def remove_song(self, artist, album, year, name):
-        song = Song(artist, album, year, name)
-        delattr(self.songs, str(song))
+        for sng in self.songs:
+            if sng.name == name and sng.artist == artist and sng.year == year and sng.year == album:
+                self.songs.remove(sng)
 
     def show_songs(self):
         for song in self.songs:

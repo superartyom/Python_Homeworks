@@ -120,5 +120,5 @@ gnumner = open('Gnumner.txt', 'x')
 gnumner.close()
 gnumner = open('Gnumner.txt', 'w')
 for k, v in mdict_5:
-    gnumner.write(f'{k}:{v} hat\n')
+    gnumner.writelines(f'{k}:{v} hat\n')
 gnumner.close()
