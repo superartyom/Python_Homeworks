@@ -1,38 +1,10 @@
-"""OOP"""
-
 import os
 import random
+import tkinter
+from tkinter import ttk
+import vlc
 
 
-# MusicPlayer homework
-# Now we are going to add some more methods to our classes. It makes sense to have an add_song and remove_song
-# methods in our playlist class, so we can modify our playlist whenever we'd like to.
-# So:
-#   a) Create an add_song method in Playlist class. The method should take a Song as a parameter (or name, artist
-#   etc. e.g. the parameters needed to create a song) and add it to our song list
-#   b) Create a remove_song method in Playlist class. The method should take a Song as a parameter and remove it
-#   from our song list.
-#   c) Now, we need to develop our Player class. Add a play method. The method will print which song is playing now.
-#   By default when we press play on a player it starts playing the first song, so you can do just that. Also,
-#   your player needs to know whether it plays something at the moment or no (so a boolean attribute can be useful).
-#   d) Create a method to show the current songs' information. If no song is playing, let the user know.
-#   e) Create two methods - next_song and prev_song. When we call these methods, the next song in the playlist
-#   will start playing.
-#   f) Create a shuffle method, which will shuffle our playlist.
-# When you've reached this point, feel free to add some other methods, which you'll find useful (for example search
-# for a song, show the playlist, etc.). Good luck!
-
-# Մեր կլասերը ընլայնելու ժամանակն է։ Նախ մեր Playlist կլասին ավելացնենք add_song և remove_song մեթոդներ։
-#   a) Ստեղծել add_song մեթոդ, որը կվերցնի մեկ արգումենտ՝ Song, կամ չորս արգումենտ, որոնցով հնարավոր է ստեղծել Song տիպի
-#   օբյեկտ։
-#   b) Ստեղծել remove_song մեթոդ, որը կվերցնի մեկ արգումենտ` Song, և կջնջի տվյալ երգը song_list-ից։
-#   c) Player կլասին ավելացնել play մեթոդ։ Մեթոդը կտպի, թե որ երգն է միացել։ Նվագարկիչները սովորաբար սկսում են երգել
-#   առաջին երգից։ Կարող եք մեթոդը հենց այդպես իմպլեմենտացնել։
-#   d) Ստեղծել մեթոդ, որը ցույց կտա միացած երգի ինֆորմացիան։ Եթե ոչ մի երգ միացած չէ, տեղեկացնել։
-#   e) Ստեղծել երկու մեթոդ` next_song և prev_song։ Այս մեթոդները կանչելուց համապատասխանաբար կմիանա հաջորդ կամ նախորդ
-#   երգը
-#   f) Ստեղծել shuffle մեթոդ, որը կխառնի playlist-ի երգերը։
-# Այս ամենը ստեղծելուց հետո կարող եք ավելացնել ցանկացած այլ մեթոդ, որ անհրաժեշտ կհամարեք։ Բոլորիդ հաջողությու՛ն։
 class Song:
     def __init__(self, artist, album, year, song_name):
         self.artist = artist
@@ -80,16 +52,23 @@ class Player:
         self.playlist: PlayList = playlist
         self.is_playing = False
         self.now_playing = ''
+        self.media_player = vlc.MediaPlayer()
+
+    def setup(self):
+        pass
 
     def play(self, play_index=0):
         if play_index > len(self.playlist.songs):
             print(f'No song at index {play_index}')
             return
         if not self.is_playing:
+            media = vlc.Media('')
+            self.media_player.set(media)
+            self.media_player.play()
             self.is_playing = True
-            self.now_playing = self.playlist.songs[play_index]
-            print(f'Now playing\n{self.playlist.songs[play_index]}')
-            print('=' * 100)
+            # self.now_playing = self.playlist.songs[play_index]
+            # print(f'Now playing\n{self.playlist.songs[play_index]}')
+            # print('=' * 100)
         else:
             print('Player is already active')
             print('=' * 100)
@@ -122,7 +101,15 @@ class Player:
             self.is_playing = False
             print('The player has been stopped')
         else:
-            print('Player isnt active')
+            print('Player is not active')
+
+    def pause(self):
+        if self.is_playing:
+            self.is_playing = False
+            self.media_player.set_pause(1)
+            print('The player has been paused')
+        else:
+            print('Player is not active')
 
     def shuffle(self):
         shuffled = self.playlist.songs.copy()
@@ -132,3 +119,59 @@ class Player:
 
     def __str__(self):
         return f'This player has a playlist containing {len(self.playlist.songs)} songs'
+
+
+if __name__ == '__main__':
+    window = tkinter.Tk()
+
+    window.title('Music Player')
+    window.geometry('480x260')
+    window.resizable(width=False, height=False)
+
+    playlist = PlayList()
+    player = Player(playlist)
+
+    txt = tkinter.StringVar(value='Nothing Plays')
+    # Status Label
+    Status = tkinter.Label(window, textvar=txt, font=('Helvetica', 15), borderwidth=1, relief='flat')
+    Status.grid(row=0, column=0, columnspan=4, sticky='ew')
+    # Volume scale
+    Volume = ttk.Scale(window)
+    Volume.grid(row=1, column=0, columnspan=4, sticky='ew')
+    # Buttons
+    Play_Button = tkinter.Button(window, text='Play', font=('Helvetica', 10, 'bold'), width=10, height=2, relief='flat',
+                                 borderwidth=1, background='#0fa621', activebackground='#0fa621', command=Player.play)
+    Play_Button.grid(row=2, column=0, sticky='ew')
+    Play_Button.bind('<Button-1>', func=Player.play)
+    Pause_Button = tkinter.Button(window, text='Pause', font=('Helvetica', 10, 'bold'), width=10, height=2,
+                                  relief='flat', borderwidth=1, background='#ff0000', activebackground='#ff0000')
+    Pause_Button.grid(row=2, column=1, sticky='ew')
+    Pause_Button.bind('<Button-1>', func=Player.pause)
+    Previous_Button = tkinter.Button(window, text='Previous song', font=('Helvetica', 10, 'bold'), width=10, height=2,
+                                     relief='flat', borderwidth=1, background='#696764', activebackground='#696764')
+    Previous_Button.grid(row=2, column=2, sticky='nsew')
+
+    Next_Button = tkinter.Button(window, text='Next song', font=('Helvetica', 10, 'bold'), width=10, height=2,
+                                 relief='flat', borderwidth=1, background='#696764', activebackground='#696764')
+    Next_Button.grid(row=2, column=3, sticky='ew')
+    # Song List Box
+    List = tkinter.Listbox(window)
+    List.grid(row=3, column=0, columnspan=4, sticky='nsew')
+
+    # Scrollbar
+    Scroll = tkinter.Scrollbar(window)
+    Scroll.grid(column=3, row=3, sticky='esn')
+
+    # Connecting scrollbar to list box
+    List.config(yscrollcommand=Scroll.set)
+    Scroll.config(command=List.yview)
+    # Connecting list box to song list
+    # with open('./Albums.txt') as words:
+    #     for
+    #
+
+    window.columnconfigure(0, weight=2)
+    window.columnconfigure(1, weight=2)
+    window.columnconfigure(2, weight=2)
+    window.columnconfigure(3, weight=2)
+    window.mainloop()
