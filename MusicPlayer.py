@@ -2,16 +2,15 @@ import os
 import random
 import tkinter
 from tkinter import ttk
-import vlc
 
 
 class Song:
-    def __init__(self, artist, album, year, song_name):
+    def __init__(self, artist, song_name, length, album=None, year=None):
         self.artist = artist
         self.album = album
         self.year = year
         self.name = song_name
-
+        self.length = length
     def __str__(self):
         return f'artist: {self.artist}\nAlbum: {self.album}\n Year: {self.year}\n Name: {self.name}'
 
@@ -20,16 +19,29 @@ class PlayList:
     def __init__(self):
         self.songs: [Song] = []
 
-    def load_songs(self, path):
+    # @staticmethod
+    def load_songs(self, path, listbox: tkinter.Listbox):
         if not os.path.exists(path):
             return
-        with open(path, 'r') as file:
-            for x in file.readlines():
-                artist, album, year, name = x.split('\t')
-                song = Song(artist, album, year, name)
+
+        files = os.listdir(path)
+        for index, file in enumerate(files):
+            ffile, extension = file.split('.')
+            if extension == 'mp3':
+                length = MP3('/'.join.([path, file])).info.length
+                artist, name = ffile.split(' - ')
+                listbox.insert(index, file)
+                song = Song(artist, name, length)
+                song.id = index
                 self.songs.append(song)
 
-    def add_song(self, artist, album, year, name):
+        # with open(path, 'r') as file:
+        #     for x in file.readlines():
+        #         artist, album, year, name = x.split('\t')
+        #         song = Song(artist, album, year, name)
+        #         self.songs.append(song)
+
+    def add_song(self, artist, name, album, year):
         for sng in self.songs:
             if sng.name == name and sng.artist == artist and sng.year == year and sng.year == album:
                 self.songs.append(Song(artist, album, year, name))
@@ -45,27 +57,85 @@ class PlayList:
             print("_" * 100)
 
 
-class Player:
+class Screen(tkinter.Tk):
+    pass
+
+
+class Player(tkinter.Frame):
     i = 0
 
-    def __init__(self, playlist):
+    def __init__(self, playlist, master, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
         self.playlist: PlayList = playlist
         self.is_playing = False
         self.now_playing = ''
-        self.media_player = vlc.MediaPlayer()
+        # self.media_player = vlc.MediaPlayer()
+        self.current_timestep = 0
+    def setup_player(self):
+        self.grid(column=0, row=0, sticky='ewns')
+        txt = tkinter.StringVar(value='Nothing Plays')
+        # Status Label
+        Status = tkinter.Label(self, textvar=txt, font=('Helvetica', 15), borderwidth=1, relief='flat')
+        Status.grid(row=0, column=0, columnspan=4, sticky='ew')
+        # Volume scale
+        time = ttk.Scale(self)
+        time.grid(row=1, column=0, columnspan=4, sticky='ew')
+        # Buttons
+        Play_Button = tkinter.Button(self, text='Play', font=('Helvetica', 10, 'bold'), width=10, height=2,
+                                     relief='flat',
+                                     borderwidth=1, background='#0fa621', activebackground='#0fa621',
+                                     command=Player.play)
+        Play_Button.grid(row=2, column=0, sticky='ew')
+        Play_Button.bind('<Button-1>', func=Player.play)
+        Pause_Button = tkinter.Button(self, text='Pause', font=('Helvetica', 10, 'bold'), width=10, height=2,
+                                      relief='flat', borderwidth=1, background='#ff0000', activebackground='#ff0000')
+        Pause_Button.grid(row=2, column=1, sticky='ew')
+        Pause_Button.bind('<Button-1>', func=Player.pause)
+        Previous_Button = tkinter.Button(self, text='Previous song', font=('Helvetica', 10, 'bold'), width=10,
+                                         height=2,
+                                         relief='flat', borderwidth=1, background='#696764', activebackground='#696764')
+        Previous_Button.grid(row=2, column=2, sticky='nsew')
 
-    def setup(self):
-        pass
+        Next_Button = tkinter.Button(self, text='Next song', font=('Helvetica', 10, 'bold'), width=10, height=2,
+                                     relief='flat', borderwidth=1, background='#696764', activebackground='#696764')
+        Next_Button.grid(row=2, column=3, sticky='ew')
+        # Song List Box
+        List = tkinter.Listbox(self)
+        List.grid(row=3, column=0, columnspan=4, sticky='nsew')
 
-    def play(self, play_index=0):
+        def get_name(event):
+            name = event.widget.get(event.widget.curselocation())
+            print(name)
+
+        List.bind('<Double-Button>', get_name)
+        # Scrollbar
+        Scroll = tkinter.Scrollbar(self)
+        Scroll.grid(column=3, row=3, sticky='esn')
+
+        # Connecting scrollbar to list box
+        List.config(yscrollcommand=Scroll.set)
+        Scroll.config(command=List.yview)
+        # LoadSongsFromPath
+        self.playlist.load_songs('./Music', List)
+
+    def play(self, song=None, play_index=0):
         if play_index > len(self.playlist.songs):
             print(f'No song at index {play_index}')
             return
-        if not self.is_playing:
-            media = vlc.Media('')
-            self.media_player.set(media)
-            self.media_player.play()
+        if self.current_timestep and self.now_playing == ' - '.join([song.artist, song.name])+'.mp3':
+            # self.media_player.set_pause(0)
             self.is_playing = True
+            return
+        if not self.is_playing:
+            path = '.Music/Muse - Pressure.mp3'
+            if song:
+                path = '.Music/' + ' - '.join([song.artist, song.name])+'.mp3'
+            self.now_playing = path.split('/')[-1]
+            # media = vlc.Media('')
+            # print(self.media_player.get_time() / 1000)
+            # self.media_player.set(media)
+            # self.media_player.play()
+            # self.is_playing = True
             # self.now_playing = self.playlist.songs[play_index]
             # print(f'Now playing\n{self.playlist.songs[play_index]}')
             # print('=' * 100)
@@ -105,8 +175,10 @@ class Player:
 
     def pause(self):
         if self.is_playing:
+            self.current_timestep = self.media_player.get_time() // 1000
+            self.current_timestep = self.
             self.is_playing = False
-            self.media_player.set_pause(1)
+            # self.media_player.set_pause(1)
             print('The player has been paused')
         else:
             print('Player is not active')
@@ -120,6 +192,17 @@ class Player:
     def __str__(self):
         return f'This player has a playlist containing {len(self.playlist.songs)} songs'
 
+    def select_song(self, event):
+        self.is_playing = False
+        self.now_playing = event.widget.get(event.widget.curselocation())
+        artist, song_name = self.now_playing.split('-')
+        song_name = song_name.split('.')[0]
+        self.play()
+        for song in self.playlist.songs:
+            if song.name == song_name and song.artist == artist:
+                self.play(song)
+            else:
+                return
 
 if __name__ == '__main__':
     window = tkinter.Tk()
@@ -129,46 +212,8 @@ if __name__ == '__main__':
     window.resizable(width=False, height=False)
 
     playlist = PlayList()
-    player = Player(playlist)
-
-    txt = tkinter.StringVar(value='Nothing Plays')
-    # Status Label
-    Status = tkinter.Label(window, textvar=txt, font=('Helvetica', 15), borderwidth=1, relief='flat')
-    Status.grid(row=0, column=0, columnspan=4, sticky='ew')
-    # Volume scale
-    Volume = ttk.Scale(window)
-    Volume.grid(row=1, column=0, columnspan=4, sticky='ew')
-    # Buttons
-    Play_Button = tkinter.Button(window, text='Play', font=('Helvetica', 10, 'bold'), width=10, height=2, relief='flat',
-                                 borderwidth=1, background='#0fa621', activebackground='#0fa621', command=Player.play)
-    Play_Button.grid(row=2, column=0, sticky='ew')
-    Play_Button.bind('<Button-1>', func=Player.play)
-    Pause_Button = tkinter.Button(window, text='Pause', font=('Helvetica', 10, 'bold'), width=10, height=2,
-                                  relief='flat', borderwidth=1, background='#ff0000', activebackground='#ff0000')
-    Pause_Button.grid(row=2, column=1, sticky='ew')
-    Pause_Button.bind('<Button-1>', func=Player.pause)
-    Previous_Button = tkinter.Button(window, text='Previous song', font=('Helvetica', 10, 'bold'), width=10, height=2,
-                                     relief='flat', borderwidth=1, background='#696764', activebackground='#696764')
-    Previous_Button.grid(row=2, column=2, sticky='nsew')
-
-    Next_Button = tkinter.Button(window, text='Next song', font=('Helvetica', 10, 'bold'), width=10, height=2,
-                                 relief='flat', borderwidth=1, background='#696764', activebackground='#696764')
-    Next_Button.grid(row=2, column=3, sticky='ew')
-    # Song List Box
-    List = tkinter.Listbox(window)
-    List.grid(row=3, column=0, columnspan=4, sticky='nsew')
-
-    # Scrollbar
-    Scroll = tkinter.Scrollbar(window)
-    Scroll.grid(column=3, row=3, sticky='esn')
-
-    # Connecting scrollbar to list box
-    List.config(yscrollcommand=Scroll.set)
-    Scroll.config(command=List.yview)
-    # Connecting list box to song list
-    # with open('./Albums.txt') as words:
-    #     for
-    #
+    player = Player(playlist, window)
+    player.setup_player()
 
     window.columnconfigure(0, weight=2)
     window.columnconfigure(1, weight=2)
